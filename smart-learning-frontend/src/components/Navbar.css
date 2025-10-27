@@ -1,0 +1,82 @@
+.navbar {
+  background: linear-gradient(90deg, #1976d2, #42a5f5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 36px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  font-family: "Segoe UI", sans-serif;
+  color: #fff;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-logo {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.navbar-center {
+  display: flex;
+  gap: 30px;
+}
+
+.navbar-link {
+  color: #e3f2fd;
+  font-weight: 500;
+  font-size: 16px;
+  text-decoration: none;
+  position: relative;
+  padding: 6px 0;
+  transition: all 0.25s ease;
+}
+
+.navbar-link:hover {
+  color: #fff;
+}
+
+.navbar-link.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.navbar-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background-color: #fff;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-right span {
+  font-weight: 600;
+}
+
+.logout-btn {
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.logout-btn:hover {
+  background-color: #c62828;
+  transform: translateY(-1px);
+}

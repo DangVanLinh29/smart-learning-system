@@ -1,0 +1,223 @@
+.dashboard-wrapper {
+  padding: 40px 70px;
+  background: linear-gradient(180deg, #f8fbff 0%, #ecf3ff 100%);
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* --- Card sinh viên --- */
+.student-card {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 25px 40px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+  margin-bottom: 40px;
+  animation: slide-in 0.7s ease forwards;
+}
+
+.student-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid #1976d2;
+  object-fit: cover;
+}
+
+.student-info h2 {
+  color: #0d47a1;
+  margin-bottom: 6px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.student-info p {
+  margin: 2px 0;
+  color: #444;
+}
+
+/* --- Lưới Dashboard --- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  animation: fade-in 1s ease forwards;
+}
+
+.chart-card,
+.summary-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 25px 30px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.chart-card:hover,
+.summary-card:hover {
+  transform: translateY(-3px);
+}
+
+.chart-card h3,
+.summary-card h3 {
+  color: #1565c0;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- Biểu đồ tiến độ học tập --- */
+.progress-list {
+  margin-top: 25px;
+}
+
+.progress-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 6px;
+  margin: 0 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #42a5f5, #1976d2);
+  border-radius: 6px;
+  transition: width 0.6s ease;
+}
+
+.progress-label {
+  width: 35px;
+  text-align: right;
+}
+
+/* --- Biểu đồ Doughnut --- */
+.summary-card {
+  text-align: center;
+}
+
+.circle-chart {
+  width: 230px;
+  height: 230px;
+  margin: 0 auto 15px;
+}
+
+.avg-score {
+  font-size: 16px;
+  color: #222;
+}
+
+.avg-score b {
+  color: #0d47a1;
+  font-size: 18px;
+}
+
+.status-text {
+  margin-top: 10px;
+  color: #555;
+  font-style: italic;
+}
+
+
+.insight-card {
+  background: #f3f8ff;
+  border-left: 5px solid #1976d2;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.insight-card h3 {
+  color: #0d47a1;
+  margin-bottom: 10px;
+}
+
+.insight-card li {
+  margin: 6px 0;
+  color: #333;
+  font-size: 15px;
+}
+
+.predict-card {
+  background: #fff9e6;
+  border-left: 5px solid #fbc02d;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.predict-card h3 {
+  color: #f57f17;
+  margin-bottom: 10px;
+}
+
+.predict-card li {
+  margin: 6px 0;
+  color: #333;
+  font-size: 15px;
+}
+
+
+/* --- Animation --- */
+@keyframes slide-in {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.pop-in {
+  animation: pop-in 0.8s ease-out;
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .student-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
