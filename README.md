@@ -11,15 +11,18 @@ Dự án gồm **2 phần chính**:
 
 ---
 
-## 👥 Thành viên nhóm
+### Phân chia công việc
 
-| STT | Họ tên    | Vai trò                                                           |
-| --- | --------- | ----------------------------------------------------------------- |
-| 1️⃣  | **Linh**  | Frontend Developer – Thiết kế & phát triển giao diện ReactJS      |
-| 2️⃣  | **Huy**   | Backend Developer – Xây dựng API Flask & quản lý dữ liệu học tập  |
-| 3️⃣  | **Đạt**   | AI Developer – Xây dựng mô hình gợi ý học tập cá nhân hóa         |
-| 4️⃣  | **Nhung** | Data Engineer – Xử lý dữ liệu, phân tích hành vi học tập          |
-| 5️⃣  | **Như**   | QA & Documentation – Kiểm thử hệ thống và viết tài liệu hướng dẫn |
+| Thành phần                       | Công nghệ                                | Vai trò chính                                              | Người phụ trách |
+| -------------------------------- | ---------------------------------------- | ---------------------------------------------------------- | --------------- |
+| 🖥 **Frontend**                  | ReactJS / ChartJS / Framer Motion        | Giao diện học tập, dashboard, quiz, chatbot                | **Linh**        |
+| ⚙️ **Backend**                   | Flask (Python)                           | API xử lý dữ liệu, kết nối mô hình AI                      | **Huy**         |
+| 🧩 **Cơ sở dữ liệu**             | MySQL / SQLite                           | Lưu trữ thông tin sinh viên, khóa học, kết quả học tập     | **Nhung**       |
+| 🤖 **AI / Machine Learning**     | Scikit-learn / TensorFlow / Pandas / NLP | Gợi ý học liệu, phân tích năng lực học tập, chatbot hỗ trợ | **Đạt**         |
+| ☁️ **Hạ tầng lưu trữ**           | Google Cloud / Firebase / AWS            | Lưu trữ tài nguyên học tập, mở rộng triển khai             | **Như**         |
+| 📊 **Phân tích & trực quan hóa** | Power BI / ChartJS / Looker Studio       | Theo dõi tiến độ học, phân tích kết quả theo thời gian     | **Như**        |
+| 🐳 **Triển khai & CI/CD**        | Docker / GitHub Actions / Render         | Tự động hóa build – deploy hệ thống                        | **Nhung**         |
+
 
 ---
 
@@ -37,17 +40,42 @@ Dự án gồm **2 phần chính**:
 
 smart-learning-system/
 │
-├── backend/ # Flask backend (API, ML model)
-│ ├── app.py
-│ ├── requirements.txt
-│ └── venv/ # Môi trường ảo Python (không push)
+├── 📁 backend/                     # Xử lý dữ liệu, API, mô hình AI
+│   ├── app.py                      # Flask / FastAPI server chính
+│   ├── recommender.py              # Mô hình gợi ý học tập cá nhân
+│   ├── data/                       # Dữ liệu mô phỏng
+│   │   ├── students.csv            # Danh sách sinh viên
+│   │   ├── courses.csv             # Danh sách khóa học
+│   │   └── progress.csv            # Tiến độ học tập
+│   └── requirements.txt            # Danh sách thư viện Python cần cài
 │
-├── smart-learning-frontend/ # React frontend
-│ ├── src/
-│ ├── public/
-│ └── node_modules/ # Tự sinh khi npm install (không push)
+├── 📁 frontend/                    # Giao diện người dùng (React)
+│   ├── src/
+│   │   ├── components/             # Các component: Login, Dashboard, CourseModal...
+│   │   ├── pages/                  # Các trang: Home, Recommendation, VideoPlayer...
+│   │   └── assets/                 # Ảnh, biểu tượng, CSS
+│   └── package.json                # Cấu hình và dependency React
 │
-└── README.md
+├── 📁 dashboard/                   # Phân tích và trực quan hóa dữ liệu
+│   ├── analysis.ipynb              # Notebook phân tích tiến độ học tập
+│   ├── looker_dashboard_link.txt   # Link Looker Studio (hoặc Power BI)
+│   └── superset_config.py          # Cấu hình Apache Superset (nếu có)
+│
+├── 📁 docs/                        # Tài liệu và báo cáo
+│   ├── proposal.pdf                # Đề cương dự án
+│   ├── architecture-diagram.png    # Sơ đồ kiến trúc hệ thống
+│   ├── system_design.docx          # Tài liệu thiết kế hệ thống
+│   └── final_report.docx           # Báo cáo cuối kỳ
+│
+├── 📁 .github/                     # CI/CD tự động (tùy chọn)
+│   └── workflows/
+│       └── deploy.yml              # Pipeline build & deploy
+│
+├── .gitignore                      # Loại trừ node_modules, venv, v.v.
+├── README.md                       # Hướng dẫn và mô tả dự án
+└── LICENSE                         # Giấy phép mã nguồn mở (MIT / Apache 2.0)
+
+
 
 ## 🚀 Cài đặt & chạy dự án
 
