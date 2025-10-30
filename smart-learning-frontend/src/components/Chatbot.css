@@ -1,0 +1,134 @@
+/* Vùng chứa tổng thể */
+.chatbot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 340px;
+  height: 480px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+/* Cửa sổ chat */
+.chat-window {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* Thanh cuộn gọn gàng */
+.chat-window::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-window::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.4);
+  border-radius: 3px;
+}
+
+/* Tin nhắn người dùng */
+.user-msg {
+  background: #007bff;
+  color: white;
+  padding: 10px 14px;
+  margin: 8px 0;
+  border-radius: 14px 14px 0 14px;
+  max-width: 85%;
+  align-self: flex-end;
+  margin-left: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Tin nhắn bot */
+.bot-msg {
+  background: #f1f1f1;
+  color: #222;
+  padding: 10px 14px;
+  margin: 8px 0;
+  border-radius: 14px 14px 14px 0;
+  max-width: 90%;
+  align-self: flex-start;
+  margin-right: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Ô nhập tin nhắn */
+.chat-input {
+  display: flex;
+  border-top: 1px solid #ddd;
+  background: #fafafa;
+}
+
+.chat-input input {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  outline: none;
+  font-size: 14px;
+  border-radius: 0 0 0 20px;
+}
+
+.chat-input button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0 20px;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 0 0 20px 0;
+  transition: background 0.2s;
+}
+
+.chat-input button:hover {
+  background: #005dc1;
+}
+
+/* Responsive (mobile) */
+@media (max-width: 600px) {
+  .chatbot {
+    width: 90%;
+    height: 60%;
+    bottom: 10px;
+    right: 5%;
+  }
+}
+
+.chatbot-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.chatbot-toggle:hover {
+  background: #1565c0;
+}
+
+.chatbot {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 320px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}

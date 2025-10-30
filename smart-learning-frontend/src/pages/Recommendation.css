@@ -1,0 +1,144 @@
+/* ==== BỐ CỤC TOÀN TRANG ==== */
+.recommend-page {
+  background: #f9fbff;
+  min-height: 100vh;
+  padding: 50px 0;
+}
+
+.content-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 22px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+}
+
+/* ==== TIÊU ĐỀ CHUNG ==== */
+h2 {
+  color: #0d47a1;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 6px;
+  font-size: 1.4rem;
+}
+
+.student-info p {
+  font-size: 15px;
+  margin: 4px 0;
+}
+
+/* ==== GỢI Ý HỌC LIỆU ==== */
+.recommend-wrapper {
+  margin-top: 35px;
+}
+
+.recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.recommend-card {
+  background: #f7f9ff;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #dce3ff;
+  box-shadow: 0 3px 8px rgba(33, 150, 243, 0.1);
+  transition: all 0.25s ease;
+}
+
+.recommend-card:hover {
+  transform: translateY(-5px);
+  background: #eef4ff;
+  box-shadow: 0 6px 18px rgba(33, 150, 243, 0.2);
+}
+
+.recommend-card h3 {
+  color: #0d47a1;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.recommend-card p {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.recommend-card a {
+  color: #1976d2;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.recommend-card a:hover {
+  text-decoration: underline;
+}
+
+/* ==== LÝ DO GỢI Ý ==== */
+.reason-section {
+  background: #fffbea;
+  border-left: 6px solid #ffc107;
+  border-radius: 14px;
+  padding: 20px;
+  margin-top: 40px;
+  box-shadow: 0 3px 10px rgba(255, 193, 7, 0.15);
+}
+
+.reason-section h2 {
+  color: #e59400;
+}
+
+/* ==== TIẾN ĐỘ ==== */
+.progress-section {
+  margin-top: 40px;
+  background: #f4f8ff;
+  padding: 25px 20px;
+  border-radius: 18px;
+  border-left: 6px solid #2196f3;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.progress-section h2 {
+  color: #0d47a1;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+.sl-progress-item {
+  margin-bottom: 25px;
+}
+
+.sl-progress-item span {
+  font-weight: 600;
+  font-size: 15px;
+  color: #0d47a1;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.sl-progress-track {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 22px;
+  background: #e3f2fd;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sl-progress-fill {
+  height: 100%;
+  border-radius: 12px 0 0 12px;
+  transition: width 1s ease-in-out;
+}
+
+.sl-progress-item p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: #444;
+}
