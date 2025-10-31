@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 import pandas as pd
 import random
 
+# IMPORT CÁC MODULE MỚI (Đã sửa tên hàm)
 from tlu_api import authenticate_tlu, fetch_student_marks # 🚨 SỬA LỖI IMPORT Ở ĐÂY
 from recommender import (
     process_tlu_data_to_progress, 
@@ -16,6 +17,8 @@ from recommender import (
 app = Flask(__name__)
 CORS(app)
 
+user_sessions = {} # Key: student_id, Value: {access_token, student_name, student_info}
+
 # ==============================
 # Static upload (avatar)
 # ==============================
@@ -23,6 +26,7 @@ UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -75,7 +79,6 @@ def login():
             "name": auth_result["name"],
             "student_info": auth_result
         }
-
         # 5. TRẢ VỀ THÔNG TIN SINH VIÊN
         return jsonify({
             "success": True,
@@ -85,8 +88,8 @@ def login():
                 "major": auth_result["major"]
             }
         }), 200
-
-    # 6. SỬA LẠI THÔNG BÁO LỖI (đặt ra ngoài if)
+    
+    # 6. SỬA LẠI THÔNG BÁO LỖI
     return jsonify({"success": False, "message": "Sai mã sinh viên hoặc mật khẩu."}), 401
 
 
@@ -98,7 +101,7 @@ def get_progress_data(student_id):
 
     # 1. LẤY DỮ LIỆU ĐIỂM TỔNG KẾT
     tlu_marks = fetch_student_marks(session["access_token"]) # 🚨 SỬA LỖI TÊN HÀM Ở ĐÂY
-
+    
     if tlu_marks is None: # Lỗi API
         return None, "Không thể lấy dữ liệu điểm tổng kết từ TLU API."
 
@@ -113,7 +116,6 @@ def get_progress(student_id):
     progress_data, error = get_progress_data(student_id)
     if error:
         return jsonify({"message": error}), 500
-
     return jsonify(progress_data)
 
 
@@ -123,7 +125,7 @@ def get_recommendation(student_id):
     progress_data, error = get_progress_data(student_id)
     if error:
         return jsonify({"message": error}), 500
-
+    
     recommendations = get_recommendation_logic(progress_data)
     return jsonify(recommendations)
 
@@ -157,11 +159,9 @@ def predict_future(student_id):
     predictions = predict_future_logic(progress_data)
     return jsonify(predictions)
 
-
-
 @app.route('/')
 def home():
     return jsonify({"message": "Smart Learning System Backend Ready (TLU Integrated) 🚀"})
-    
+
 if __name__ == '__main__':
     app.run(debug=False, port=5000)

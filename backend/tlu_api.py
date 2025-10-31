@@ -95,7 +95,7 @@ def fetch_student_marks(access_token):
         if not data:
              print("CẢNH BÁO: TLU API (StudentMark) trả về danh sách điểm rỗng.")
         else:
-            print(f"Successfully fetched {len(data)} marks from TLU API.")
+             print(f"Successfully fetched {len(data)} marks from TLU API.")
         return data
 
     except requests.exceptions.HTTPError as e:

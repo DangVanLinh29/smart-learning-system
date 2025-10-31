@@ -4,7 +4,7 @@ import "./Login.css";
 
 export default function Login({ onLoginSuccess }) {
   const [studentId, setStudentId] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(""); // <-- 1. Thêm state cho mật khẩu
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
@@ -14,17 +14,16 @@ export default function Login({ onLoginSuccess }) {
     try {
       const res = await axios.post("http://127.0.0.1:5000/api/login", {
         student_id: studentId,
-        password: password,
+        password: password, // <-- 2. Gửi mật khẩu đi
       });
 
       if (res.data.success) {
-        // ✅ Lưu thông tin sinh viên để các trang khác (như Hồ sơ) đọc lại được
-        localStorage.setItem("student", JSON.stringify(res.data.student));
 
         // ✅ Gọi hàm App để chuyển hướng
         onLoginSuccess(res.data.student);
       } else {
-        setError(res.data.message || "Sai mã sinh viên hoặc mật khẩu!");
+        // Cập nhật thông báo lỗi cho chính xác hơn
+        setError(res.data.message || "Sai mã sinh viên hoặc mật khẩu!"); 
       }
     } catch (err) {
       setError("Lỗi kết nối server!");
@@ -45,7 +44,7 @@ export default function Login({ onLoginSuccess }) {
             placeholder="Nhập mã sinh viên..."
             required
           />
-
+          {/* 3. Thêm ô nhập mật khẩu */}
           <input
             type="password"
             value={password}
@@ -53,6 +52,7 @@ export default function Login({ onLoginSuccess }) {
             placeholder="Nhập mật khẩu..."
             required
           />
+
           <button type="submit">Đăng nhập</button>
         </form>
 
