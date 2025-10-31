@@ -26,6 +26,14 @@ export default function Navbar({ studentName, onLogout }) {
         >
           Gợi ý học tập
         </Link>
+        <Link
+          to="/schedule" 
+          className={`navbar-link ${
+            location.pathname === "/schedule" ? "active" : ""
+          }`}
+        >
+          Các môn đang học
+        </Link>
       </div>
 
       <div className="navbar-right">
