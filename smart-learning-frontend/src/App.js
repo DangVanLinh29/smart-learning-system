@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// Import các component cũ
 import Navbar from "./components/Navbar";
 
 // Pages
@@ -12,21 +13,25 @@ import QuizPage from "./pages/QuizPage";
 // ✅ import Chatbot (đường dẫn chỉnh lại đúng)
 import Chatbot from "./components/Chatbot";
 
+// 1. IMPORT COMPONENT MỚI (SchedulePage)
+import SchedulePage from "./components/SchedulePage"; 
+
+
 function App() {
   const [student, setStudent] = useState(null);
 
   return (
     <Router>
-      {/* Navbar chỉ hiện khi đã đăng nhập */}
-      {student && (
-        <Navbar studentName={student.name} onLogout={() => setStudent(null)} />
-      )}
-
+      {/* Navbar sẽ hiển thị nếu student (sinh viên) đã đăng nhập */}
+      {student && <Navbar studentName={student.name} onLogout={() => setStudent(null)} />}
+      
       <Routes>
         {/* Nếu chưa đăng nhập → hiển thị trang Login */}
         {!student ? (
+          // Nếu CHƯA đăng nhập, tất cả các đường dẫn đều trỏ về trang Login
           <Route path="*" element={<Login onLoginSuccess={setStudent} />} />
         ) : (
+          // Nếu ĐÃ đăng nhập, cho phép truy cập các trang nội bộ
           <>
             <Route
               path="/"
@@ -47,7 +52,14 @@ function App() {
               }
             />
             <Route path="/course-video" element={<CourseVideoPage />} />
-            <Route path="/quiz" element={<QuizPage />} />
+            
+            {/* 2. ĐỊNH TUYẾN CHO /schedule (PHẢI KHỚP VỚI NAVBAR) */}
+            <Route 
+              path="/schedule" 
+              element={<SchedulePage studentId={student.student_id} studentName={student.name} />} 
+            />
+            {/* === HẾT PHẦN THÊM MỚI === */}
+            
           </>
         )}
       </Routes>

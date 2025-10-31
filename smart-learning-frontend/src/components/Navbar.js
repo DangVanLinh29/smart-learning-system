@@ -1,9 +1,10 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";  // ✅ thêm useLocation
 import "./Navbar.css";
 
 export default function Navbar({ studentName, onLogout }) {
   const navigate = useNavigate();
+  const location = useLocation(); // ✅ hook này thay cho window.location
 
   return (
     <nav className="navbar">
@@ -18,8 +19,13 @@ export default function Navbar({ studentName, onLogout }) {
         <NavLink to="/recommendations">
           Gợi ý học tập
         </NavLink>
-        <NavLink to="/progress">
-          Tiến độ học tập
+        <NavLink
+          to="/schedule"
+          className={`navbar-link ${
+            location.pathname === "/schedule" ? "active" : ""
+          }`}
+        >
+          Các môn đang học
         </NavLink>
       </div>
 
