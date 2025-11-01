@@ -8,7 +8,6 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Recommendation from "./pages/Recommendation";
 import CourseVideoPage from "./pages/CourseVideoPage";
-import QuizPage from "./pages/QuizPage";
 
 // ✅ import Chatbot (đường dẫn chỉnh lại đúng)
 import Chatbot from "./components/Chatbot";
@@ -44,13 +43,9 @@ function App() {
             />
             <Route
               path="/recommendations"
-              element={
-                <Recommendation
-                  studentId={student.student_id}
-                  studentName={student.name}
-                />
-              }
+              element={<Recommendation student={student} />}
             />
+
             <Route path="/course-video" element={<CourseVideoPage />} />
             
             {/* 2. ĐỊNH TUYẾN CHO /schedule (PHẢI KHỚP VỚI NAVBAR) */}

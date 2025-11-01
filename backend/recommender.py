@@ -3,6 +3,20 @@ from sklearn.linear_model import LinearRegression
 import random
 import hashlib
 import pandas as pd
+import requests
+import os
+from dotenv import load_dotenv  # ✅ Thêm dòng này
+
+# ✅ Nạp file .env để lấy key (bắt buộc)
+load_dotenv()
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+
+if not YOUTUBE_API_KEY:
+    print("⚠️ CẢNH BÁO: Chưa nạp được YOUTUBE_API_KEY từ .env")
+else:
+    print("✅ Đã nạp thành công YOUTUBE_API_KEY")
+
+
 
 # --- HÀM 1: XỬ LÝ ĐIỂM TỔNG KẾT (CHO DASHBOARD/GỢI Ý) ---
 def process_tlu_data_to_progress(tlu_marks_data, student_id):
@@ -133,35 +147,51 @@ def get_recommendation_logic(progress_data):
     Logic gợi ý học tập dựa trên tiến độ thấp (dưới 70%).
     (progress_data là một DataFrame)
     """
-    # 🚨 SỬA LỖI TYPEERROR: Lặp qua DataFrame dùng .iterrows()
+    # Lọc các môn có tiến độ < 70%
     low_courses = [row for index, row in progress_data.iterrows() if row["progress"] < 70]
 
     if not low_courses:
         return {
-            "message": "🎉 Tat ca cac mon deu dat tot! Ban dang di dung huong.",
+            "message": "🎉 Tất cả các môn đều đạt tốt! Bạn đang đi đúng hướng.",
             "recommendations": []
         }
 
     recommendations = []
-    for course_data in low_courses: # course_data giờ là một Series (hoặc dict-like)
+    for course_data in low_courses:
         course = course_data["course"]
         progress = course_data["progress"]
+
+        # 🧭 Roadmap (các bước hành động)
         roadmap = [
-            f"On lai kien thuc co ban trong mon {course} (dat {progress}%)",
-            f"Tap trung lam them bai tap du an thuc te lien quan.",
-            f"Tim tai lieu/video chuyen sau tu cac nguon ngoai.",
-            f"Thao luan voi ban Dat hoac giang vien ve phan kien thuc kho."
+            f"Ôn lại kiến thức cơ bản trong môn {course} (đạt {progress}%)",
+            "Tập trung làm thêm bài tập dự án thực tế liên quan.",
+            "Tìm tài liệu/video chuyên sâu từ các nguồn ngoài.",
+            "Thảo luận với bạn bè hoặc giảng viên về phần kiến thức khó."
         ]
+
+        # 🔍 Tích hợp gợi ý video YouTube
+        videos = search_youtube_videos(f"bài giảng {course} đại học")
+
+        # 📚 Tích hợp tài liệu & bài tập
+        resources = get_learning_resources(course)
+
+        # ✅ Tổng hợp thành một gợi ý hoàn chỉnh
         recommendations.append({
             "course": course,
             "progress": progress,
-            "roadmap": roadmap
+            "roadmap": roadmap,
+            "resources": {
+                "videos": videos,
+                "documents": resources["documents"],
+                "exercises": resources["exercises"]
+            }
         })
 
     return {
-        "message": "⚡ Mot so mon can cai thien de dat thanh tich tot hon.",
+        "message": "⚡ Một số môn cần cải thiện để đạt thành tích tốt hơn.",
         "recommendations": recommendations
     }
+
 
 def predict_future_logic(progress_data):
     """
@@ -241,3 +271,75 @@ def get_insight_logic(progress_data):
     
     return {"insights": insights}
 
+def search_youtube_videos(query, max_results=3):
+    """
+    🔍 Tìm video YouTube liên quan đến môn học.
+    Trả về danh sách [{title, url}].
+    """
+    try:
+        print(f"🎥 Đang gọi YouTube API với query: {query}")
+        print(f"🔑 API KEY: {YOUTUBE_API_KEY[:10]}...")
+        url = (
+            f"https://www.googleapis.com/youtube/v3/search"
+            f"?part=snippet&type=video&q={query}&maxResults={max_results}&key={YOUTUBE_API_KEY}"
+        )
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        videos = []
+        for item in data.get("items", []):
+            video_id = item["id"].get("videoId")
+            title = item["snippet"]["title"]
+            if video_id:
+                videos.append({
+                    "title": title,
+                    "url": f"https://www.youtube.com/watch?v={video_id}"
+                })
+
+        return videos
+    except Exception as e:
+        print(f"❌ Lỗi khi tìm video YouTube cho {query}: {e}")
+        return []
+
+def get_learning_resources(course):
+    """
+    📚 Gợi ý tài liệu PDF, bài tập online theo môn học.
+    Bạn có thể mở rộng bằng cách đọc từ file JSON hoặc DB.
+    """
+    course = course.lower()
+    if "cấu trúc dữ liệu" in course or "giải thuật" in course:
+        return {
+            "documents": [
+                "https://drive.google.com/file/d/1abcXYZ/view",
+                "https://viblo.asia/p/cau-truc-du-lieu-va-giai-thuat"
+            ],
+            "exercises": [
+                "https://leetcode.com/problemset/all/",
+                "https://www.hackerrank.com/domains/tutorials/10-days-of-algorithms"
+            ]
+        }
+    elif "công nghệ web" in course:
+        return {
+            "documents": [
+                "https://developer.mozilla.org/vi/docs/Learn",
+                "https://www.w3schools.com/html/"
+            ],
+            "exercises": [
+                "https://frontendmentor.io/challenges",
+                "https://codepen.io/"
+            ]
+        }
+    elif "an toàn" in course:
+        return {
+            "documents": [
+                "https://www.coursera.org/learn/cybersecurity-basics",
+                "https://owasp.org/"
+            ],
+            "exercises": [
+                "https://tryhackme.com/",
+                "https://www.root-me.org/"
+            ]
+        }
+    else:
+        return {"documents": [], "exercises": []}
