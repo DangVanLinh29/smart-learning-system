@@ -1,0 +1,68 @@
+{
+  "Mạng máy tính": {
+    "description": "Môn học này cung cấp kiến thức nền tảng về các mô hình mạng, giao thức và cách các thiết bị giao tiếp.",
+    "roadmap": [
+      "Nắm vững 7 tầng của mô hình OSI và chức năng của từng tầng.",
+      "Thực hành chia địa chỉ IP (Subnetting) cho các mạng con.",
+      "Sử dụng Wireshark để phân tích các gói tin (HTTP, TCP, DNS).",
+      "Tìm hiểu sự khác biệt cốt lõi giữa TCP và UDP."
+    ],
+    "videos": [
+      {
+        "title": "Bài giảng 1: Tổng quan & Mô hình OSI",
+        "url": "https://www.youtube.com/watch?v=example_link_1"
+      }
+    ],
+    "documents": [
+      {
+        "title": "Giáo trình Mạng máy tính (TLU)",
+        "url": "https://your-university.com/giao_trinh_mang_may_tinh.pdf"
+      }
+    ],
+    "exercises": [
+      {
+        "title": "Bài tập 1: Chia địa chỉ IP (Subnetting)",
+        "url": "https://your-university.com/bt/bai_tap_chia_ip.pdf"
+      }
+    ]
+  },
+  "Lập trình nâng cao": {
+    "description": "Tập trung vào các kỹ thuật lập trình C++ nâng cao, quản lý bộ nhớ và lập trình hướng đối tượng.",
+    "roadmap": [
+      "Nắm vững khái niệm Con trỏ (Pointers) và quản lý bộ nhớ (cấp phát động).",
+      "Hiểu rõ 4 tính chất của Lập trình hướng đối tượng (OOP).",
+      "Thực hành các cấu trúc dữ liệu cơ bản: Danh sách liên kết, Ngăn xếp, Hàng đợi.",
+      "Luyện tập kỹ năng xử lý file (File I/O)."
+    ],
+    "videos": [
+      {
+        "title": "Bài giảng 1: Con trỏ và Bộ nhớ",
+        "url": "https://www.youtube.com/watch?v=example_link_oop_1"
+      }
+    ],
+    "documents": [],
+    "exercises": [
+      {
+        "title": "Bài tập OOP: Xây dựng lớp Phân số",
+        "url": "https://your-university.com/bt/bt_oop_phanso.pdf"
+      }
+    ]
+  },
+  "Lập trình Windows": {
+    "description": "Xây dựng ứng dụng giao diện (GUI) trên nền tảng Windows sử dụng .NET (C#) hoặc WinForms/WPF.",
+    "roadmap": [
+      "Hiểu rõ về .NET Framework và ngôn ngữ C#.",
+      "Làm quen với các control cơ bản: Button, TextBox, Label, ComboBox.",
+      "Học cách xử lý sự kiện (Events) như Click, TextChanged.",
+      "Thực hành kết nối CSDL (SQL Server) với ứng dụng WinForms."
+    ],
+    "videos": [],
+    "documents": [
+      {
+        "title": "Giáo trình Lập trình Windows (C#)",
+        "url": "https://your-university.com/giao_trinh_lap_trinh_windows.pdf"
+      }
+    ],
+    "exercises": []
+  }
+}

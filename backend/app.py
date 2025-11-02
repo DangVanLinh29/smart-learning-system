@@ -21,7 +21,8 @@ from recommender import (
     get_recommendation_logic, 
     predict_future_logic,
     get_insight_logic,
-    process_schedule_to_courses 
+    process_schedule_to_courses,
+    build_cf_model_data
 )
 
 app = Flask(__name__)
@@ -64,15 +65,10 @@ def upload_avatar():
 DB_NAME = "tlu_cache.db"
 CACHE_DURATION = 3600 # 1 giờ
 
-# Khởi tạo kết nối toàn cục (để tránh lỗi ghi đè)
-# Tuy nhiên, trong Flask đa luồng an toàn hơn là mở và đóng kết nối
-# Chúng ta sẽ giữ nguyên logic mở/đóng, nhưng sửa lỗi truy vấn.
-
 def init_db():
     """ Khởi tạo CSDL SQLite (chạy 1 lần) """
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    # Tạo bảng cache (student_id, data_type, json_data, timestamp)
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS api_cache (
         student_id TEXT,
@@ -90,8 +86,6 @@ def get_from_cache(student_id, data_type):
     """ Lấy dữ liệu từ cache (nếu có và chưa hết hạn) """
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
-    # 🚨 SỬA LỖI 2: THÊM LỆNH TRUY VẤN
     cursor.execute('''
         SELECT json_data, timestamp 
         FROM api_cache 
@@ -102,10 +96,8 @@ def get_from_cache(student_id, data_type):
     conn.close()
     
     if result:
-        # Lấy dữ liệu và timestamp
         json_data, cache_timestamp = result
         
-        # 🚨 SỬA LỖI 3: KIỂM TRA THỜI GIAN HẾT HẠN
         if time.time() - cache_timestamp > CACHE_DURATION:
             print(f"CACHE EXPIRED: Du lieu {data_type} da het han. Goi lai API TLU.")
             return None
@@ -113,15 +105,9 @@ def get_from_cache(student_id, data_type):
         print(f"CACHE HIT: Tra ve du lieu {data_type} cho {student_id} tu CSDL.")
         
         try:
-            # Dữ liệu được lưu dưới dạng JSON String (pd.to_json)
-            # Dùng pd.read_json để đọc ra DataFrame
-            # Anh nên dùng data=json_data chứ không phải result[0]
-            # Đảm bảo dữ liệu đọc ra là DataFrame
             json_io = StringIO(json_data) 
             return pd.read_json(json_io, orient='records')
-
         except Exception as e:
-            # In ra lỗi nếu không thể đọc JSON (Serialization Error)
             print(f"ERROR: Khong the doc/convert JSON tu cache CSDL: {e}")
             return None 
     
@@ -133,17 +119,14 @@ def set_to_cache(student_id, data_type, data):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     try:
-        # 🚨 SỬA LỖI LOGIC: Chắc chắn đầu vào là list/dict trước khi tạo DataFrame
         if isinstance(data, pd.DataFrame):
              data_to_serialize = data
         elif isinstance(data, list) and all(isinstance(i, dict) for i in data):
-             # Nếu đầu vào là List of Dicts (như từ API TLU), ta tạo DataFrame
              data_to_serialize = pd.DataFrame(data)
         else:
              print(f"ERROR: Du lieu {data_type} khong the luu vao cache (phai la list/DataFrame).")
              return
 
-        # Chuyển DataFrame thành JSON (Text) dùng orient='records'
         json_data = data_to_serialize.to_json(orient='records') 
         
         cursor.execute(
@@ -158,15 +141,48 @@ def set_to_cache(student_id, data_type, data):
         conn.close()
 # --- KẾT THÚC THIẾT LẬP CACHE ---
 
+# =========================================================
+# NẠP VÀ HUẤN LUYỆN MÔ HÌNH AI KHI KHỞI ĐỘNG
+# =========================================================
+print("🚀 Đang nạp mô hình gợi ý AI (CF) từ 'tong_hop_diem_sinh_vien.csv'...")
+cf_model_data = None
+try:
+    full_data = pd.read_csv("tong_hop_diem_sinh_vien.csv")
+    cf_model_data = build_cf_model_data(full_data)
+    
+    if cf_model_data and cf_model_data[0] is not None:
+        print(f"✅ Nạp mô hình AI (CF) thành công. Đã phân tích {len(cf_model_data[0])} sinh viên.")
+    else:
+        print("❌ LỖI: Không thể nạp mô hình AI (CF).")
+        cf_model_data = None
+        
+except FileNotFoundError:
+    print("❌ LỖI: Không tìm thấy tệp 'tong_hop_diem_sinh_vien.csv'.")
+    cf_model_data = None
+except Exception as e:
+    print(f"❌ LỖI: Không thể nạp mô hình AI (CF) từ CSV. Lý do: {e}")
+    cf_model_data = None
+    
+# =========================================================
+# NẠP CƠ SỞ DỮ LIỆU HỌC LIỆU (JSON) - (Đã bị AI thay thế, nhưng cứ để đây)
+# =========================================================
+print("🚀 Đang nạp 'Cơ sở dữ liệu học liệu' từ 'learning_materials.json'...")
+materials_db = {}
+try:
+    with open("learning_materials.json", "r", encoding="utf-8") as f:
+        materials_db = json.load(f)
+    print(f"✅ Nạp CSDL học liệu thành công. Đã tải {len(materials_db)} môn học.")
+except FileNotFoundError:
+    print("⚠️ CẢNH BÁO: Không tìm thấy tệp 'learning_materials.json'. Gợi ý thủ công sẽ bị TẮT.")
+except Exception as e:
+    print(f"❌ LỖI: Không thể nạp 'learning_materials.json'. Lý do: {e}")
+# =========================================================
+
 # Lưu trữ phiên đăng nhập (token và info) tạm thời
 user_sessions = {} 
 
-
 @app.route('/api/login', methods=['POST'])
 def login():
-    """
-    API đăng nhập. Nhận MSV và Mật khẩu từ frontend.
-    """
     try:
         data = request.get_json()
         if not data:
@@ -208,7 +224,7 @@ def get_ALL_marks_data(student_id):
     Hàm hỗ trợ: Lấy dữ liệu ĐIỂM TỔNG KẾT (Tất cả các môn đã học).
     """
     cached_data = get_from_cache(student_id, "marks")
-    if cached_data is not None: # 🚨 SỬA LỖI: Kiểm tra 'is not None' (vì DataFrame có thể rỗng)
+    if cached_data is not None:
         return cached_data, None 
 
     session = user_sessions.get(student_id)
@@ -233,82 +249,90 @@ def get_ALL_marks_data(student_id):
 def get_progress(student_id):
     """ 
     API lấy tiến độ học tập (dùng cho Dashboard).
-    Sử dụng API Điểm tổng kết (Đã có Cache).
     """
     progress_data, error = get_ALL_marks_data(student_id) 
     if error:
         return jsonify({"message": error}), 500
         
-    # 🚨 SỬA LỖI TYPEERROR: 
-    # Chuyển DataFrame (Pandas) về JSON (orient='records') để gửi cho Frontend
     return jsonify(progress_data.to_dict(orient='records'))
-
 
 
 @app.route('/api/recommendation/<student_id>', methods=['GET'])
 def get_recommendation(student_id):
     """ 
-    API lấy lộ trình gợi ý học tập (dùng cho trang Gợi ý).
-    Sử dụng API Điểm tổng kết.
+    API Gợi ý, sử dụng Cả 3 nguồn: TLU API, CF (CSV), và Gemini AI
     """
     progress_data, error = get_ALL_marks_data(student_id) 
     if error:
         return jsonify({"message": error}), 500
     
-    recommendations = get_recommendation_logic(progress_data)
+    try:
+        student_id_int = int(student_id)
+    except ValueError:
+        student_id_int = None
+        print(f"Warning: student_id {student_id} không phải là số, không thể dùng mô hình CF.")
+
+    recommendations = get_recommendation_logic(
+        progress_data,
+        student_id_int, 
+        cf_model_data,
+        materials_db # materials_db này có thể bị bỏ qua nếu logic dùng AI
+    )
+    
     return jsonify(recommendations)
 
-
-@app.route('/api/insight', methods=['GET'])
-def get_insight():
+# =========================================================
+# ‼️ SỬA LỖI LOGIC: API /api/insight PHẢI LẤY ĐÚNG student_id
+# =========================================================
+@app.route('/api/insight/<student_id>', methods=['GET'])
+def get_insight(student_id): # <-- Thêm (student_id)
     """ 
     API Phân tích AI tổng quan (dùng cho Dashboard).
-    Sử dụng API Điểm tổng kết (của sinh viên đầu tiên đăng nhập).
+    Sử dụng API Điểm tổng kết (của sinh viên đang xem).
     """
-    student_id = list(user_sessions.keys())[0] if user_sessions else None
+    # ‼️ XÓA BỎ LOGIC CŨ (lấy sinh viên đầu tiên)
+    # student_id = list(user_sessions.keys())[0] if user_sessions else None
+    
     if not student_id:
-           return jsonify({"insights": ["Chua co sinh vien dang nhap de phan tich."]})
+           return jsonify({"insights": ["Không tìm thấy mã sinh viên để phân tích."]})
 
+    # Hàm get_ALL_marks_data sẽ lấy điểm của đúng sinh viên này
     progress_data, error = get_ALL_marks_data(student_id) 
 
-    if error or progress_data.empty: # 🚨 SỬA LỖI: Kiểm tra DataFrame rỗng
-        return jsonify({"insights": ["Khong du du lieu de phan tich tuong quan."]})
+    if error or progress_data.empty:
+        return jsonify({"insights": ["Không đủ dữ liệu để phân tích."]})
         
+    # (Hàm get_insight_logic đã được sửa ở lần trước)
     insights = get_insight_logic(progress_data)
     return jsonify(insights)
 
-# ==============================
-# API dự báo: dựa trên score10 (trả cả score10 & progress %)
-# ==============================
+
 @app.route('/api/predict/<student_id>', methods=['GET'])
 def predict_future(student_id):
-    """ API Dự báo tiến độ học tập """
+    """ API Dự báo tiến độ học tập (MÔ PHỎNG) """
     progress_list, error = get_ALL_marks_data(student_id)
     if error:
         return jsonify({"message": error}), 500
         
-    # CHUYỂN DANH SÁCH TIẾN ĐỘ THÀNH DATAFRAME TRƯỚC KHI DỰ ĐOÁN
     try:
         progress_data = pd.DataFrame(progress_list)
     except Exception as e:
-        # Xử lý nếu list rỗng hoặc format sai
         return jsonify({"message": f"Loi khi tao DataFrame tu tien do: {e}"}), 500
 
     predictions = predict_future_logic(progress_data) 
     return jsonify(predictions)
 
 
-# --- API CHO TRANG "CÁC MÔN ĐANG HỌC" (MỚI, ĐÃ CÓ CACHE) ---
+# --- API CHO TRANG "CÁC MÔN ĐANG HỌC" ---
 
 @app.route('/api/current-schedule/<student_id>', methods=['GET'])
 def get_current_schedule(student_id):
     """
     API lấy các môn ĐANG HỌC (cho trang SchedulePage.js)
-    Sử dụng API Lịch học (fetch_student_schedule) thay vì API Điểm.
     """
     cached_data = get_from_cache(student_id, "schedule")
-    if cached_data is not None: # 🚨 SỬA LỖI: Kiểm tra 'is not None'
-        return jsonify(cached_data.to_dict(orient='records')) # 🚨 SỬA LỖI: Chuyển DataFrame về JSON
+    if cached_data is not None:
+        return jsonify(cached_data.to_dict(orient='records')) 
 
     session = user_sessions.get(student_id)
     if not session or "access_token" not in session:
@@ -329,7 +353,7 @@ def get_current_schedule(student_id):
     
     set_to_cache(student_id, "schedule", processed_schedule)
     
-    return jsonify(processed_schedule.to_dict(orient='records')) # 🚨 SỬA LỖI: Chuyển DataFrame về JSON
+    return jsonify(processed_schedule.to_dict(orient='records'))
 
 
 @app.route('/')
@@ -338,4 +362,4 @@ def home():
 
 if __name__ == '__main__':
     init_db() 
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5000)
