@@ -1,112 +1,106 @@
-## 🎯 Giới thiệu
+# 🎓 Smart Learning System
 
-**Smart Learning System** là nền tảng học trực tuyến thông minh giúp sinh viên học theo **lộ trình và tốc độ riêng**, từ đó tăng hiệu quả học tập và hỗ trợ giảng viên trong việc quản lý, đánh giá và định hướng học tập cá nhân hóa.
+Hệ thống học tập thông minh cho sinh viên Đại học Thủy Lợi (TLU), giúp quản lý tiến độ học tập, phân tích kết quả và gợi ý cải thiện bằng **AI Gemini**.  
+Website gồm hai phần: **Frontend (React.js)** và **Backend (Flask, Python)**.
 
-Dự án gồm **2 phần chính**:
+👥 Phân công công việc
+Thành viên Vai trò chính Công việc phụ trách
+Đặng Văn Linh Quản lý tổng thể dự án, merge branch, cấu trúc code, fix lỗi, tối ưu hệ thống, Chat bot
+Huy Backend Lead Xử lý gọi API (Axios), hiển thị dữ liệu động, tối ưu trải nghiệm người dùng
+Đạt Backend Lead Huấn luyện và tối ưu mô hình Machine Learning (Linear Regression, CF), triển khai logic AI Gemini, gợi ý học tập thông minh
+Nhung Data Engineer Xử lý tong_hop_diem_sinh_vien.csv, huấn luyện mô hình ML (CF, Linear Regression)
+Như System & Integration Quản lý cấu trúc hệ thống, đồng bộ dữ liệu data_synchronizer.py, test API và kết nối Front–Back
 
-- 🖥 **Frontend (ReactJS):** Giao diện web thân thiện, trực quan.
-- ⚙️ **Backend (Flask - Python):** Xử lý dữ liệu, gợi ý lộ trình học tập, kết nối cơ sở dữ liệu và AI.
+## 🚀 Công nghệ sử dụng
+
+### 🖥️ Frontend
+
+- React.js (Vite)
+- Axios (gọi API)
+- TailwindCSS / CSS modules
+- React Router DOM
+
+### ⚙️ Backend
+
+- Flask (Python)
+- SQLite3 Database
+- Google Gemini API
+- YouTube Data API v3
+- Scikit-learn, Pandas, NumPy
+- Dotenv (đọc API keys)
+- Linear Regression (dự đoán điểm)
+- CF (Collaborative Filtering – gợi ý khóa học)
+
+## 🧩 Tính năng chính
+
+✅ **Đăng nhập sinh viên TLU** (qua API)  
+✅ **Phân tích tiến độ học tập** theo từng môn  
+✅ **Dự đoán kết quả học tập** bằng mô hình Machine Learning  
+✅ **Gợi ý học tập cá nhân hoá** bằng AI Gemini  
+✅ **Tìm kiếm video YouTube học tập** theo môn học  
+✅ **Khám phá môn học mới** bằng hệ gợi ý CF  
+✅ **Giao diện thân thiện, phản hồi nhanh**
 
 ---
 
-### Phân chia công việc
-
-| Thành phần                       | Công nghệ                                | Vai trò chính                                              | Người phụ trách |
-| -------------------------------- | ---------------------------------------- | ---------------------------------------------------------- | --------------- |
-| 🖥 **Frontend**                   | ReactJS / ChartJS / Framer Motion        | Giao diện học tập, dashboard, quiz, chatbot                | **Linh**        |
-| ⚙️ **Backend**                   | Flask (Python)                           | API xử lý dữ liệu, kết nối mô hình AI                      | **Huy**         |
-| 🧩 **Cơ sở dữ liệu**             | MySQL / SQLite                           | Lưu trữ thông tin sinh viên, khóa học, kết quả học tập     | **Nhung**       |
-| 🤖 **AI / Machine Learning**     | Scikit-learn / TensorFlow / Pandas / NLP | Gợi ý học liệu, phân tích năng lực học tập, chatbot hỗ trợ | **Đạt**         |
-| ☁️ **Hạ tầng lưu trữ**           | Google Cloud / Firebase / AWS            | Lưu trữ tài nguyên học tập, mở rộng triển khai             | **Như**         |
-| 📊 **Phân tích & trực quan hóa** | Power BI / ChartJS / Looker Studio       | Theo dõi tiến độ học, phân tích kết quả theo thời gian     | **Như**         |
-| 🐳 **Triển khai & CI/CD**        | Docker / GitHub Actions / Render         | Tự động hóa build – deploy hệ thống                        | **Nhung**       |
-
----
-
-## 🎯 Mục tiêu cụ thể
-
-1. Phân tích dữ liệu học tập để đề xuất khóa học và tài liệu phù hợp.
-2. Gợi ý **video, bài tập, quiz** theo năng lực cá nhân bằng mô hình học máy.
-3. Xây dựng **dashboard trực quan** theo dõi tiến độ học tập và điểm số theo thời gian thực.
-4. Tích hợp **chatbot AI** hỗ trợ sinh viên trong quá trình học.
-5. Hỗ trợ giảng viên phát hiện sinh viên gặp khó khăn để can thiệp kịp thời.
-
----
-
-## ⚙️ Cấu trúc dự án
+## 📂 Cấu trúc dự án
 
 smart-learning-system/
+├── backend/
+│ ├── app.py # Flask API chính
+│ ├── recommender.py # Logic AI & gợi ý học tập
+│ ├── tlu_api_handler.py # Giao tiếp với API TLU
+│ ├── data_synchronizer.py # Đồng bộ dữ liệu sinh viên
+│ ├── static_data_importer.py # Xử lý dữ liệu CSV mẫu
+│ ├── learning_materials.json # Dữ liệu tài liệu học tập
+│ ├── ai_youtube_cache.db # Cache AI & YouTube
+│ ├── smart_learning.db # CSDL chính
+│ ├── models/
+│ │ ├── scaler.joblib
+│ │ ├── le_course.joblib
+│ │ └── score_mlp.keras
+│ ├── requirements.txt
+│ └── tong_hop_diem_sinh_vien.csv
 │
-├── 📁 backend/ # Xử lý dữ liệu, API, mô hình AI
-│ ├── app.py # Flask / FastAPI server chính
-│ ├── recommender.py # Mô hình gợi ý học tập cá nhân
-│ ├── data/ # Dữ liệu mô phỏng
-│ │ ├── students.csv # Danh sách sinh viên
-│ │ ├── courses.csv # Danh sách khóa học
-│ │ └── progress.csv # Tiến độ học tập
-│ └── requirements.txt # Danh sách thư viện Python cần cài
-│
-├── 📁 frontend/ # Giao diện người dùng (React)
-│ ├── src/
-│ │ ├── components/ # Các component: Login, Dashboard, CourseModal...
-│ │ ├── pages/ # Các trang: Home, Recommendation, VideoPlayer...
-│ │ └── assets/ # Ảnh, biểu tượng, CSS
-│ └── package.json # Cấu hình và dependency React
-│
-├── 📁 dashboard/ # Phân tích và trực quan hóa dữ liệu
-│ ├── analysis.ipynb # Notebook phân tích tiến độ học tập
-│ ├── looker_dashboard_link.txt # Link Looker Studio (hoặc Power BI)
-│ └── superset_config.py # Cấu hình Apache Superset (nếu có)
-│
-├── 📁 docs/ # Tài liệu và báo cáo
-│ ├── proposal.pdf # Đề cương dự án
-│ ├── architecture-diagram.png # Sơ đồ kiến trúc hệ thống
-│ ├── system_design.docx # Tài liệu thiết kế hệ thống
-│ └── final_report.docx # Báo cáo cuối kỳ
-│
-├── 📁 .github/ # CI/CD tự động (tùy chọn)
-│ └── workflows/
-│ └── deploy.yml # Pipeline build & deploy
-│
-├── .gitignore # Loại trừ node_modules, venv, v.v.
-├── README.md # Hướng dẫn và mô tả dự án
-└── LICENSE # Giấy phép mã nguồn mở (MIT / Apache 2.0)
+└── smart-learning-frontend/
+├── src/
+│ ├── pages/
+│ │ ├── Login.js / Login.css
+│ │ ├── Dashboard.js
+│ │ ├── Recommendation.js / Recommendation.css
+│ └── components/
+└── package.json
 
-## 🚀 Cài đặt & chạy dự án
+🧠 Cấu hình API Keys
 
-### 1️⃣ Clone repository
+Tạo file `.env` trong thư mục `backend/`:
+YOUTUBE_API_KEY=your_youtube_api_key
+GEMINI_API_KEY=your_gemini_api_key
 
-git clone https://github.com/DangVanLinh29/smart-learning-system.git
-cd smart-learning-system
+🏃‍♂️ Cách chạy project
 
-### 2️⃣ Cài đặt Backend (Flask)
-
+1️⃣ Cài đặt môi trường Backend
 cd backend
-python -m venv venv
-venv\Scripts\activate # Windows
 pip install -r requirements.txt
+npm start: Mở Chat Bot
 
-3️⃣ Cài đặt Frontend (React)
-cd ../smart-learning-frontend
+2️⃣ Cài đặt Frontend
+cd smart-learning-frontend
 npm install
+npm run start
 
-4️⃣ Chạy toàn bộ hệ thống cùng lúc
+📊 Ví dụ API
+| Endpoint | Mô tả |
+| ---------------------------------- | ------------------------------ |
+| `/api/login` | Đăng nhập sinh viên TLU |
+| `/api/progress/<student_id>` | Lấy tiến độ học tập |
+| `/api/recommendation/<student_id>` | Gợi ý học tập bằng AI |
+| `/api/insight/<student_id>` | Phân tích AI tổng quan |
+| `/api/predict/<student_id>` | Dự đoán kết quả sắp tới |
+| `/api/youtube/<keyword>` | Tìm video YouTube theo từ khóa |
 
-Về thư mục gốc: smart-learning-system
-Chạy chương trình:smart-learning-frontend
-npm start
-Chạy chatbot: cd backend   
-npm start
+🧩 Demo gợi ý AI
+Gửi prompt tới Google Gemini → AI trả về JSON gồm “roadmap” & “video_topics” → Flask xử lý và kết hợp kết quả với video YouTube thật.
 
-🧰 Công nghệ sử dụng
-Frontend
-ReactJS
-Chart.js
-React Router
-Axios
-Framer Motion
-Backend
-Flask
-Pandas
-Scikit-learn
-Flask-CORS
+🧾 License
+MIT License — dùng cho mục đích học tập và nghiên cứu.
