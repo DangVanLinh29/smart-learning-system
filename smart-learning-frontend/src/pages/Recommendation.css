@@ -110,3 +110,84 @@
 .link-truncate:hover {
   text-decoration: underline;
 }
+
+/* ======================================== */
+/* NÂNG CẤP GIAO DIỆN "GỢI Ý KHÁM PHÁ"    */
+/* ======================================== */
+
+/* 1. Biến danh sách dọc thành một lưới (Grid) đáp ứng (responsive) */
+.recommendation-list-discover {
+  display: grid;
+  
+  /* Đây là chìa khóa: 
+    - Tự động tạo các cột có chiều rộng tối thiểu 280px.
+    - '1fr' cho phép các cột tự co giãn để lấp đầy không gian.
+    - Tự động xuống hàng nếu không đủ chỗ.
+  */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  
+  gap: 24px; /* Khoảng cách giữa các thẻ */
+  padding: 10px 0;
+}
+
+/* 2. Thiết kế lại từng thẻ "Khám phá" */
+.discover-card {
+  background-color: #ffffff; /* Nền trắng */
+  border: 1px solid #e0e0e0; /* Viền xám nhạt */
+  border-radius: 12px; /* Bo góc hiện đại */
+  padding: 24px;
+  
+  /* Đổ bóng nhẹ để tạo độ sâu */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  
+  /* Hiệu ứng mượt mà khi di chuột */
+  transition: all 0.3s ease-in-out;
+  
+  /* Sắp xếp nội dung bên trong thẻ */
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Đảm bảo các thẻ có chiều cao bằng nhau (nếu trong cùng 1 hàng) */
+}
+
+/* 3. Thêm hiệu ứng di chuột (Hover) */
+.discover-card:hover {
+  /* Nâng thẻ lên một chút */
+  transform: translateY(-5px);
+  
+  /* Đổ bóng rõ hơn */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+/* 4. Căn chỉnh Tiêu đề và Văn bản */
+.discover-card h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #1a202c; /* Màu chữ đậm */
+  font-size: 1.15rem; /* To hơn một chút */
+}
+
+.discover-card p {
+  font-size: 0.9rem;
+  color: #4a5568; /* Màu xám cho văn bản phụ */
+  flex-grow: 1; /* Đẩy nút "Tìm hiểu" xuống dưới cùng */
+  margin-bottom: 20px;
+}
+
+/* 5. Biến link "Tìm hiểu môn học" thành một cái Nút (Button) */
+.discover-link {
+  display: inline-block;
+  text-align: center;
+  padding: 10px 16px;
+  background-color: #4285F4; /* Màu xanh Google / màu chủ đạo */
+  color: #ffffff; /* Chữ trắng */
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.discover-link:hover {
+  background-color: #3367D6; /* Màu xanh đậm hơn khi di chuột */
+}
