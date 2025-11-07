@@ -4,36 +4,42 @@ import "./Login.css";
 
 export default function Login({ onLoginSuccess }) {
   const [studentId, setStudentId] = useState("");
-  const [password, setPassword] = useState(""); // <-- 1. Thêm state cho mật khẩu
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false); // Hiệu ứng chuyển trang
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const res = await axios.post("http://127.0.0.1:5000/api/login", {
         student_id: studentId,
-        password: password, // <-- 2. Gửi mật khẩu đi
+        password: password,
       });
 
       if (res.data.success) {
-
-        // ✅ Gọi hàm App để chuyển hướng
-        onLoginSuccess(res.data.student);
+        // Hiệu ứng fade-out trước khi vào Dashboard
+        setFadeOut(true);
+        setTimeout(() => {
+          onLoginSuccess(res.data.student);
+        }, 700); // Thời gian khớp với animation CSS
       } else {
-        // Cập nhật thông báo lỗi cho chính xác hơn
-        setError(res.data.message || "Sai mã sinh viên hoặc mật khẩu!"); 
+        setError(res.data.message || "Sai mã sinh viên hoặc mật khẩu!");
       }
     } catch (err) {
       setError("Lỗi kết nối server!");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
+    <div className={`login-container ${fadeOut ? "fade-out" : ""}`}>
       <div className="login-card">
-        <h2>🎓 Smart Learning System</h2>
+        <h2>&#127891; Smart Learning System</h2>
         <p>Đăng nhập bằng tài khoản TLU</p>
 
         <form onSubmit={handleSubmit}>
@@ -44,7 +50,6 @@ export default function Login({ onLoginSuccess }) {
             placeholder="Nhập mã sinh viên..."
             required
           />
-          {/* 3. Thêm ô nhập mật khẩu */}
           <input
             type="password"
             value={password}
@@ -53,7 +58,9 @@ export default function Login({ onLoginSuccess }) {
             required
           />
 
-          <button type="submit">Đăng nhập</button>
+          <button type="submit" disabled={loading}>
+            {loading ? <div className="loading-spinner"></div> : "Đăng nhập"}
+          </button>
         </form>
 
         {error && <p className="error-text">{error}</p>}

@@ -1,112 +1,208 @@
-/* ====== CARD GRID ====== */
-.recommendation-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 32px; /* ✅ khoảng cách rõ ràng giữa các card */
-  align-items: start;
-  grid-auto-rows: auto;
-  padding-bottom: 60px; /* ✅ tránh dính đáy */
-  position: relative;
-  z-index: 0;
+.recommendation-container {
+  padding: 2rem 3rem;
+  font-family: "Inter", sans-serif;
+  color: #1a1a1a;
 }
 
-/* ====== CARD ====== */
+.recommendation-container h2 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.recommendation-message {
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.recommendation-section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 1.8rem 0 1rem;
+}
+
+/* === CARD GRID === */
+.recommendation-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.6rem;
+  align-items: stretch; 
+}
+
+/* === CARD STYLE === */
 .recommendation-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f9faff 100%);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 20px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  position: relative;
-  z-index: 1;
-  height: auto;
-  overflow: hidden; /* ✅ tránh bóng đổ lan ra ngoài gây chồng */
-  margin-bottom: 6px; /* ✅ tách nhẹ giữa các hàng để tránh “đè” */
+  justify-content: flex-start;
+  border: 1px solid #f0f0f0;
+  min-height: 540px;
+  max-height: 720px;
+  overflow: hidden;
 }
 
 .recommendation-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  z-index: 2;
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
 }
 
-/* ====== VIDEO GRID ====== */
+/* === HEADER === */
+.course-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 0.4rem;
+}
+
+.progress-text {
+  color: #444;
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+}
+
+.roadmap {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin: 0 0 0.6rem 0;
+  padding-left: 1rem;
+  list-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: #bbb transparent;
+  max-height: 180px; 
+}
+.roadmap::-webkit-scrollbar {
+  width: 6px;
+}
+.roadmap::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+.roadmap li {
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* === RESOURCE BLOCK === */
+.resource-block {
+  margin-top: 0.6rem;
+  border-top: 1px solid #eee;
+  padding-top: 0.6rem;
+}
+
+.resource-block h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0d47a1;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* === VIDEO GRID === */
 .video-grid {
   display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 6px;
-  scrollbar-width: none;
-}
-.video-grid::-webkit-scrollbar {
-  display: none;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
 .video-card {
-  flex: 0 0 auto;
-  width: 160px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
+  width: 48%;
+  background: #f9f9ff;
+  border-radius: 12px;
   overflow: hidden;
   text-decoration: none;
-  color: #222;
-  transition: 0.2s;
+  color: #111;
+  transition: all 0.2s ease;
+  border: 1px solid #eee;
 }
-
 .video-card:hover {
-  background: #f1f5f9;
-  transform: translateY(-2px);
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
 }
-
-/* ====== GIỮ BÓNG ĐỔ KHÔNG ĐÈ HÀNG DƯỚI ====== */
-.recommendation-list::after {
-  content: "";
-  display: block;
-  height: 20px; /* ✅ tạo “khoảng đệm ảo” để tách các hàng */
-}
-
-
-/* giữ thumbnail luôn đúng tỉ lệ, không giãn card */
 .video-thumb {
   width: 100%;
-  height: 100px;
+  height: 90px;
   object-fit: cover;
 }
-
 .video-title {
-  font-size: 12px;
-  padding: 6px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  font-size: 0.8rem;
+  padding: 0.4rem;
+  font-weight: 500;
+  color: #222;
 }
 
-/* ====== LINK SECTIONS ====== */
+/* === LINKS === */
 .link-list {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
   margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 12px;
 }
-
+.link-list li {
+  margin-bottom: 0.3rem;
+}
 .link-truncate {
-  color: #2563eb;
+  color: #1976d2;
   text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 500;
-  max-width: 160px;
+  font-size: 0.9rem;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
 }
-
 .link-truncate:hover {
   text-decoration: underline;
+}
+
+/* === DISCOVER SECTION === */
+.recommendation-list-discover {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.discover-card {
+  flex: 1 1 260px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  border: 1px solid #f0f0f0;
+  transition: all 0.25s ease;
+}
+.discover-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+.discover-card h4 {
+  font-weight: 600;
+  color: #0d47a1;
+}
+.discover-link {
+  display: inline-block;
+  margin-top: 0.3rem;
+  color: #1565c0;
+  text-decoration: none;
+  font-weight: 500;
+}
+.discover-link:hover {
+  text-decoration: underline;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .recommendation-card {
+    height: auto;
+    max-height: 600px;
+  }
+  .roadmap {
+    max-height: 180px;
+  }
 }

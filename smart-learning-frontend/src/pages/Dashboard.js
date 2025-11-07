@@ -23,6 +23,7 @@ export default function Dashboard({ studentId, studentName }) {
   const [avatar, setAvatar] = useState(null); // thêm state ảnh đại diện
 
   useEffect(() => {
+    // API 1: Lấy tiến độ (Tính trung bình 63.7%)
     axios.get(`http://127.0.0.1:5000/api/progress/${studentId}`).then((res) => {
       setProgressData(res.data);
       const avg =
@@ -30,10 +31,15 @@ export default function Dashboard({ studentId, studentName }) {
       setAverage(avg.toFixed(1));
     });
 
-    axios.get(`http://127.0.0.1:5000/api/insight`).then((res) => {
+    // =========================================================
+    // ‼️ SỬA LỖI LOGIC: API /api/insight PHẢI GỬI KÈM studentId
+    // =========================================================
+    axios.get(`http://127.0.0.1:5000/api/insight/${studentId}`).then((res) => {
       setInsights(res.data.insights);
     });
+    // =========================================================
 
+    // API 3: Lấy dự đoán
     axios.get(`http://127.0.0.1:5000/api/predict/${studentId}`).then((res) => {
       setPredictions(res.data.predictions);
     });
